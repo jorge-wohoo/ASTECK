@@ -2,11 +2,10 @@
 
 {
     'name': 'Guatemala - Reportes y funcionalidad extra',
-    'version': '3.0',
+    'version': '14.0',
     'category': 'Localization',
     'description': """ Reportes requeridos por la SAT y otra funcionalidad extra para llevar un contabilidad en Guatemala. """,
-    'author': 'José Rodrigo Fernández Menegazzo',
-    'website': 'http://aquih.com/',
+    'author': 'Juan Jose Samayoa',
     'depends': ['l10n_gt', 'account_tax_python', 'product'],
     'data': [
         'data/l10n_gt_extra_base.xml',
@@ -22,7 +21,7 @@
         'views/reporte_diario.xml',
         'views/reporte_mayor.xml',
         'views/l10n_gt_extra_view.xml',
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
     ],
     'demo': [],
     'installable': True,
