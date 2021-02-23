@@ -45,7 +45,7 @@ class AccountMove(models.Model):
                 impuestos_valores.append({'nombre': rango.impuestos_ids[0].name,'impuesto_id': rango.impuestos_ids[0].id,'account_id': rango.impuestos_ids[0].account_id.id,'total': impuesto_individual})
         impuesto_total = 0
         self.update({'amount_tax': suma_impuesto, 'amount_total': impuesto_total + self.amount_untaxed})
-        account_invoice_tax = self.env['account.invoice.tax']
+        account_invoice_tax = self.env['account.tax']
 
         for impuesto in impuestos_valores:
             account_invoice_tax.create({'invoice_id': self.id,'tax_id':impuesto['impuesto_id'],'name': impuesto['nombre'],'account_id': impuesto['account_id'],'amount':impuesto['total'] })
