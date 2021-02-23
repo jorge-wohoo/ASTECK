@@ -65,7 +65,7 @@ class infile_account_invoice(models.Model):
     def _compute_infile(self):
         for record in self:
             if record.move_type == 'out_invoice' and record.state in ('posted', 'cancel') and record.amount_tax is not None and record.create_date is not None:
-                xmlstr='<?xml version="1.0"?><dte:GTDocumento xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dte="http://www.sat.gob.gt/dte/fel/0.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="0.4" xsi:schemaLocation="http://www.sat.gob.gt/dte/fel/0.1.0">'
+                xmlstr='<?xml version="1.0"?><dte:GTDocumento xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="0.1" xsi:schemaLocation="http://www.sat.gob.gt/dte/fel/0.2.0">'
                 xmlstr+='<dte:SAT ClaseDocumento="dte">'
                 xmlstr+='<dte:DTE ID="DatosCertificados">'
                 xmlstr+='<dte:DatosEmision ID="DatosEmision">'
@@ -117,17 +117,6 @@ class infile_account_invoice(models.Model):
                 xmlstr+='</dte:TotalImpuestos>'
                 xmlstr+='<dte:GranTotal>'+ str(round((record.amount_total),3)) +'</dte:GranTotal>'
                 xmlstr+='</dte:Totales>'
-                #xmlstr+='<dte:Complementos>'
-                #xmlstr+='<dte:Complemento IDComplemento="Cambiaria" NombreComplemento="Cambiaria'+ str(record.id) +'" URIComplemento="http://www.sat.gob.gt/fel/cambiaria.xsd">'
-                #xmlstr+='<cfc:AbonosFacturaCambiaria xmlns:cfc="http://www.sat.gob.gt/dte/fel/CompCambiaria/0.1.0" Version="1" xsi:schemaLocation="http://www.sat.gob.gt/dte/fel/CompCambiaria/0.1.0">'
-                #xmlstr+='<cfc:Abono>'
-                #xmlstr+='<cfc:NumeroAbono>'+ str(record.id) +'</cfc:NumeroAbono>'
-                #xmlstr+='<cfc:FechaVencimiento>'+ str(record.invoice_date_due) +'</cfc:FechaVencimiento>'
-                #xmlstr+='<cfc:MontoAbono>'+ str(round((record.amount_total),3)) +'</cfc:MontoAbono>'
-                #xmlstr+='</cfc:Abono>'
-                #xmlstr+='</cfc:AbonosFacturaCambiaria>'
-                #xmlstr+='</dte:Complemento>'
-                #xmlstr+='</dte:Complementos>'
                 xmlstr+='</dte:DatosEmision>'
                 xmlstr+='</dte:DTE>'
                 xmlstr+='<dte:Adenda>'
@@ -155,7 +144,7 @@ class infile_account_invoice(models.Model):
                         record.json_data =respuesta_firma_json
                         if record.json_data !='':
                             record.archivofirmado = respuesta_firma_json["archivo"]
-                            url_certificacion = 'https://certificador.feel.com.gt/fel/certificacion/dte'
+                            url_certificacion = 'https://certificador.feel.com.gt/fel/certificacion/v2/dte'
                             data_certificacion = {
                                 "nit_emisor": str(record.company_id.vat), 
                                 "correo_copia":str(record.partner_id.email),
@@ -198,7 +187,7 @@ class infile_account_invoice(models.Model):
                                         record.anulacion_json=respuesta_cancelacion_signer
                                         if record.json_data !='':
                                             if record.firmaelectronica !='' and record.fechacertificacion !='' and record.anulacion_json !='':
-                                                url = 'https://certificador.feel.com.gt/fel/anulacion/dte/'
+                                                url = 'https://certificador.feel.com.gt/fel/anulacion/v2/dte/'
                                                 data_anulacion = {
                                                                 "nit_emisor": str(record.company_id.vat), 
                                                                 "correo_copia":str(record.partner_id.email),
